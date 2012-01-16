@@ -216,7 +216,7 @@ namespace noise
         void SetOctaveCount (int octaveCount)
         {
           if (octaveCount < 1 || octaveCount > BILLOW_MAX_OCTAVE) {
-            throw noise::ExceptionInvalidParam ();
+            LIBNOISE_FATAL("noise::ExceptionInvalidParam ()");
           }
           m_octaveCount = octaveCount;
         }

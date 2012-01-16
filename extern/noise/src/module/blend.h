@@ -93,7 +93,7 @@ namespace noise
         const Module& GetControlModule () const
         {
           if (m_pSourceModule == NULL || m_pSourceModule[2] == NULL) {
-            throw noise::ExceptionNoModule ();
+            LIBNOISE_FATAL("noise::ExceptionNoModule ()");
           }
           return *(m_pSourceModule[2]);
         }

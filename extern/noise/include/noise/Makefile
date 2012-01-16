@@ -2,11 +2,11 @@
 all: here model module
 
 here:
-	cp ../src/*.h .
+	cp ../../src/*.h .
 model:
-	(mkdir $@ && cp ../src/model/*.h $@)
+	(mkdir $@ && cp ../../src/model/*.h $@)
 module:
-	(mkdir $@ && cp ../src/$@/*.h $@)
+	(mkdir $@ && cp ../../src/$@/*.h $@)
 
 clean:
 	-rm *.h

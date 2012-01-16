@@ -258,7 +258,7 @@ namespace noise
         void SetOctaveCount (int octaveCount)
         {
           if (octaveCount > RIDGED_MAX_OCTAVE) {
-            throw noise::ExceptionInvalidParam ();
+            LIBNOISE_FATAL("noise::ExceptionInvalidParam ()");
           }
           m_octaveCount = octaveCount;
         }

@@ -1,5 +1,7 @@
 include (FindGLUT)
 include (FindLuaJIT)
+include (FindNoise)
+
 include_directories (${GLUT_INCLUDE_PATH})
 set (SQUISH_SRC
   image/squish/alpha.cpp
@@ -13,7 +15,7 @@ set (SQUISH_SRC
   image/squish/squish.cpp)
 add_library (squish STATIC ${SQUISH_SRC})
 
-set (SRC
+set (GAME_SRC
   game/main.cpp
   game/game.cpp
   game/game.hpp
@@ -109,7 +111,7 @@ set (SRC
 
 set (COMPILE_UTEST false CACHE bool "Compile or not the unit tests")
 if (COMPILE_UTEST)
-  set (SRC ${SRC}
+  set (GAME_SRC ${GAME_SRC}
        utest/utest_console.cpp
        utest/utest_lua.cpp
        utest/utest_rt.cpp
@@ -118,14 +120,31 @@ if (COMPILE_UTEST)
 endif (COMPILE_UTEST)
 
 include_directories (.)
+include_directories (${NOISE_INCLUDE_DIR})
 include_directories (${LUAJIT_INCLUDE_DIR})
 
 if (UNIX)
-  set (EXEC_DEPENDENCIES ${GLUT_LIBRARY} ${LUAJIT_LIBRARY} pthread dl)
+  set (EXEC_DEPENDENCIES ${GLUT_LIBRARY} ${LUAJIT_LIBRARY} ${NOISE_LIBRARY} pthread dl)
 else (UNIX)
-  set (EXEC_DEPENDENCIES ${GLUT_LIBRARY} ${LUAJIT_LIBRARY} OpenGL32)
+  set (EXEC_DEPENDENCIES ${GLUT_LIBRARY} ${LUAJIT_LIBRARY} ${NOISE_LIBRARY} OpenGL32)
 endif (UNIX)
 
-add_executable (game ${SRC})
+add_executable (game ${GAME_SRC})
 target_link_libraries (game ${EXEC_DEPENDENCIES} squish)
+
+set (NOISE_UTILITY_SRC game/noise/noiseutils.cpp)
+add_library (noise_utility STATIC ${NOISE_UTILITY_SRC})
+
+add_executable (complexplanet game/noise/complexplanet.cpp)
+add_executable (texturegranite game/noise/texturegranite.cpp)
+add_executable (texturejade game/noise/texturejade.cpp)
+add_executable (texturesky game/noise/texturesky.cpp)
+add_executable (textureslime game/noise/textureslime.cpp)
+add_executable (texturewood game/noise/texturewood.cpp)
+target_link_libraries (complexplanet ${NOISE_LIBRARY} noise_utility)
+target_link_libraries (texturegranite ${NOISE_LIBRARY} noise_utility)
+target_link_libraries (texturejade ${NOISE_LIBRARY} noise_utility)
+target_link_libraries (texturesky ${NOISE_LIBRARY} noise_utility)
+target_link_libraries (textureslime ${NOISE_LIBRARY} noise_utility)
+target_link_libraries (texturewood ${NOISE_LIBRARY} noise_utility)
 

@@ -98,7 +98,7 @@ namespace noise
       const Module& GetXDisplaceModule () const
       {
         if (m_pSourceModule == NULL || m_pSourceModule[1] == NULL) {
-          throw noise::ExceptionNoModule ();
+          LIBNOISE_FATAL("noise::ExceptionNoModule ()");
         }
         return *(m_pSourceModule[1]);
       }
@@ -120,7 +120,7 @@ namespace noise
       const Module& GetYDisplaceModule () const
       {
         if (m_pSourceModule == NULL || m_pSourceModule[2] == NULL) {
-          throw noise::ExceptionNoModule ();
+          LIBNOISE_FATAL("noise::ExceptionNoModule ()");
         }
         return *(m_pSourceModule[2]);
       }
@@ -142,7 +142,7 @@ namespace noise
       const Module& GetZDisplaceModule () const
       {
         if (m_pSourceModule == NULL || m_pSourceModule[3] == NULL) {
-          throw noise::ExceptionNoModule ();
+          LIBNOISE_FATAL("noise::ExceptionNoModule ()");
         }
         return *(m_pSourceModule[3]);
       }

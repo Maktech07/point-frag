@@ -262,7 +262,7 @@ namespace noise
           //   m_pSourceModule[index] == NULL
           if (index >= GetSourceModuleCount () || index < 0
             || m_pSourceModule[index] == NULL) {
-            throw noise::ExceptionNoModule ();
+            LIBNOISE_FATAL("noise::ExceptionNoModule ()");
           }
           return *(m_pSourceModule[index]);
         }
@@ -329,7 +329,7 @@ namespace noise
         {
           assert (m_pSourceModule != NULL);
           if (index >= GetSourceModuleCount () || index < 0) {
-            throw noise::ExceptionInvalidParam ();
+            LIBNOISE_FATAL("noise::ExceptionInvalidParam ()");
           }
           m_pSourceModule[index] = &sourceModule;
         }

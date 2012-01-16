@@ -80,4 +80,11 @@ set (NOISE_SRC
   module/voronoi.h)
 
 add_library (noise SHARED ${NOISE_SRC})
+install_targets (/bin/ noise)
+file (GLOB HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/*.h")
+install (FILES ${HEADERS} DESTINATION include/noise/)
+file (GLOB HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/model/*.h")
+install (FILES ${HEADERS} DESTINATION include/noise/model)
+file (GLOB HEADERS "${CMAKE_CURRENT_SOURCE_DIR}/module/*.h")
+install (FILES ${HEADERS} DESTINATION include/noise/module)
 
