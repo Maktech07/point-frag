@@ -564,14 +564,6 @@ namespace pf
     PF_SAFE_DELETE_ARRAY(this->tri);
     PF_SAFE_DELETE_ARRAY(this->vert);
     PF_SAFE_DELETE_ARRAY(this->grp);
-    for (size_t i = 0; i < this->matNum; ++i) {
-      Material &mat = this->mat[i];
-      PF_SAFE_DELETE_ARRAY(mat.name);
-      PF_SAFE_DELETE_ARRAY(mat.map_Ka);
-      PF_SAFE_DELETE_ARRAY(mat.map_Kd);
-      PF_SAFE_DELETE_ARRAY(mat.map_D);
-      PF_SAFE_DELETE_ARRAY(mat.map_Bump);
-    }
     PF_SAFE_DELETE_ARRAY(this->mat);
   }
 }

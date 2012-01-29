@@ -40,6 +40,7 @@ namespace pf
       t = t0;
     }
     current->processEvents();
+
     return NULL;
   }
 }

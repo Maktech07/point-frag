@@ -30,7 +30,7 @@
 using namespace noise;
 
 // Height of the texture.
-const int TEXTURE_HEIGHT = 256;
+const int TEXTURE_HEIGHT = 1024;
 
 // Creates the color gradients for the texture.
 void CreateTextureColor (utils::RendererImage& renderer);
@@ -108,12 +108,9 @@ int main ()
 
   // Given the jade noise module, create a non-seamless texture map, a
   // seamless texture map, and a spherical texture map.
-  CreatePlanarTexture (finalJade, false, TEXTURE_HEIGHT,
-    "textureplane.bmp");
-  CreatePlanarTexture (finalJade, true, TEXTURE_HEIGHT,
-    "textureseamless.bmp");
-  CreateSphericalTexture (finalJade, TEXTURE_HEIGHT,
-    "texturesphere.bmp");
+  CreatePlanarTexture (finalJade, false, TEXTURE_HEIGHT, "textureplane.bmp");
+  CreatePlanarTexture (finalJade, true, TEXTURE_HEIGHT, "textureseamless.bmp");
+  CreateSphericalTexture (finalJade, TEXTURE_HEIGHT, "texturesphere.bmp");
 
   return 0;
 }

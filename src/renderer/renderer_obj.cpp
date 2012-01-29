@@ -297,16 +297,19 @@ namespace pf
     R_CALL (VertexAttribPointer, RendererDriver::ATTR_TEXCOORD, 2,
             GL_FLOAT, GL_FALSE, sizeof(Obj::Vertex),
             (void*) offsetof(Obj::Vertex, t));
+    R_CALL (VertexAttribPointer, RendererDriver::ATTR_NORMAL, 3,
+            GL_FLOAT, GL_TRUE, sizeof(Obj::Vertex),
+            (void*) offsetof(Obj::Vertex, n));
     R_CALL (BindBuffer, GL_ARRAY_BUFFER, 0);
     R_CALL (EnableVertexAttribArray, RendererDriver::ATTR_POSITION);
     R_CALL (EnableVertexAttribArray, RendererDriver::ATTR_TEXCOORD);
+    R_CALL (EnableVertexAttribArray, RendererDriver::ATTR_NORMAL);
     R_CALL (BindVertexArray, 0);
   }
 
   RendererObj::RendererObj(Renderer &renderer, const Obj &obj) :
     RendererDisplayable(renderer, RN_DISPLAYABLE_WAVEFRONT),
-    sharedData(NULL), vertexArray(0), arrayBuffer(0), elementBuffer(0),
-    properties(0)
+    sharedData(NULL), vertexArray(0), arrayBuffer(0), elementBuffer(0)
   {
     TextureStreamer &streamer = *renderer.streamer;
     PF_MSG_V("RendererObj: asynchronously loading textures");
@@ -322,7 +325,7 @@ namespace pf
       matRemap[matID] = i;
       Material &material = this->mat[i];
       material.map_Kd = renderer.defaultTex;
-      material.name_Kd = obj.mat[matID].map_Kd;
+      material.name_Kd = obj.mat[matID].map_Kd ? obj.mat[matID].map_Kd : "";
     }
 
     // Start to load the textures
@@ -344,28 +347,7 @@ namespace pf
     PF_SAFE_DELETE_ARRAY(matRemap);
   }
 
-  void RendererObj::onCompile(void) {
-    if (this->properties & RN_OBJ_OCCLUDER) {
-      PF_MSG_V("Game: building BVH");
-      RendererObjSharedData *shared = (RendererObjSharedData*) sharedData.ptr;
-      PF_ASSERT(shared->indexNum % 3 == 0);
-      const uint32 triNum = shared->indexNum / 3;
-      RTTriangle *tris = PF_NEW_ARRAY(RTTriangle, triNum);
-      for (size_t index = 0; index < shared->indexNum; index += 3) {
-        const uint32 index0 = shared->indices[index+0];
-        const uint32 index1 = shared->indices[index+1];
-        const uint32 index2 = shared->indices[index+2];
-        const vec3f &v0 = shared->vertices[index0].p;
-        const vec3f &v1 = shared->vertices[index1].p;
-        const vec3f &v2 = shared->vertices[index2].p;
-        tris[index / 3] = RTTriangle(v0,v1,v2);
-      }
-      BVH2<RTTriangle>* bvh = PF_NEW(BVH2<RTTriangle>);
-      buildBVH2(tris, triNum, *bvh);
-      PF_DELETE_ARRAY(tris);
-      this->intersector = PF_NEW(BVH2Traverser<RTTriangle>, bvh);
-    }
-  }
+  void RendererObj::onCompile(void) { }
 
   void RendererObj::onUnreferenced(void) {
     this->texLoading = NULL;

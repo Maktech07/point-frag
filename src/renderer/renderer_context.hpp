@@ -33,6 +33,10 @@ namespace pf
   typedef class RendererFrame *RnFrame;
   /*! A renderer task is just a regular task */
   typedef class Task *RnTask;
+  /*! We can provide occluding intersector structures */
+  typedef class Intersector *RnIntersector;
+  /*! We can create a renderer obj directly from an wavefront OBJ */
+  struct Obj;
 
   ///////////////////////////////////////////////////////////////////////////
   /// Renderer context is the complete rendering interface
@@ -90,19 +94,14 @@ namespace pf
   /// Renderer OBJ. Directly maps a Wavefront OBJ
   ///////////////////////////////////////////////////////////////////////////
 
-  enum {
-    RN_OBJ_OCCLUDER        = 1 << 0, //!< Has its own BVH
-    RN_OBJ_SHARED_OCCLUDER = 1 << 1, //!< Included in a Set BVH
-  };
-
-  /*! Create a renderer OBJ. Returns NULL if object not found */
-  RnObj rnObjNew(RnContext, const char *fileName);
+  /*! Create a renderer OBJ from an OBJ */
+  RnObj rnObjNew(RnContext, const Obj &obj);
   /*! Remove a reference on a renderer OBJ. Delete it if unreferenced */
   void rnObjDelete(RnObj);
   /*! Add a reference on the OBJ */
   void rnObjRetain(RnObj);
-  /*! Will be an occluder (has a BVH) */
-  void rnObjProperties(RnObj, uint32 properties);
+  /*! Set the intersector for the renderer OBJ */
+  void rnObjSetIntersector(RnObj obj, RnIntersector);
   /*! Once compiled the obj becomes immutable */
   void rnObjCompile(RnObj);
 

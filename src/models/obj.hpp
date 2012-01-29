@@ -30,7 +30,7 @@ namespace pf
     /*! OBJ triangle - indexes vertices and material */
     struct Triangle {
       INLINE Triangle(void) {}
-      INLINE Triangle(vec3i v_, int m_) : v(v_), m(m_) {}
+      INLINE Triangle(vec3i v, int m) : v(v), m(m) {}
       vec3i v;
       int m;
       PF_STRUCT(Triangle);
@@ -39,8 +39,7 @@ namespace pf
     /*! OBJ vertex - stores position, normal and texture coordinates */
     struct Vertex {
       INLINE Vertex(void) {}
-      INLINE Vertex(vec3f p_, vec3f n_, vec2f t_) :
-        p(p_), n(n_), t(t_) {}
+      INLINE Vertex(vec3f p, vec3f n, vec2f t) : p(p), n(n), t(t) {}
       vec3f p, n;
       vec2f t;
       PF_STRUCT(Vertex);
@@ -48,15 +47,32 @@ namespace pf
 
     /*! OBJ material group - triangles are grouped by material */
     struct MatGroup {
-      MatGroup(int first_, int last_, int m_) :
-        first(first_), last(last_), m(m_) {}
+      MatGroup(int first, int last, int m) : first(first), last(last), m(m) {}
       MatGroup(void) {}
       int first, last, m;
       PF_STRUCT(MatGroup);
     };
 
     /*! OBJ Material - just a dump of mtl description */
-    struct Material {
+    struct Material
+    {
+      /*! Default material does not use any texture */
+      Material(void) :
+        name(NULL), map_Ka(NULL), map_Kd(NULL), map_D(NULL), map_Bump(NULL)
+      {
+        amb[0] = amb[1] = amb[2] = 0.;
+        diff[0] = diff[1] = diff[2] = 0.6;
+        spec[0] = spec[1] = spec[2] = 0.;
+        km = reflect = refract = trans = shiny = glossy = refract_index = 0.;
+      }
+      /*! Free texture names if any */
+      ~Material(void) {
+        PF_SAFE_DELETE_ARRAY(name);
+        PF_SAFE_DELETE_ARRAY(map_Ka);
+        PF_SAFE_DELETE_ARRAY(map_Kd);
+        PF_SAFE_DELETE_ARRAY(map_D);
+        PF_SAFE_DELETE_ARRAY(map_Bump);
+      }
       char *name;
       char *map_Ka;
       char *map_Kd;
@@ -75,9 +91,13 @@ namespace pf
       PF_STRUCT(Material);
     };
 
+    /*! Create an empty OBJ */
     Obj(void);
+    /*! Release everything */
     ~Obj(void);
+    /*! To be valid, an OBJ must contain some geometry */
     INLINE bool isValid(void) const {return this->triNum > 0;}
+    /*! Load a obj from a file. Return true if success */
     bool load(const FileName &fileName);
     Triangle *tri;
     Vertex *vert;

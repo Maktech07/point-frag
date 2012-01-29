@@ -167,10 +167,13 @@ namespace pf
     "#version 130\n"
     "uniform mat4 MVP;\n"
     "in vec3 p;\n"
+    "in vec3 n;\n"
     "in vec2 t;\n"
     "out vec2 out_t;\n"
-    "void main() {	\n"
+    "out vec3 out_n;\n"
+    "void main() {\n"
     "  out_t = t;\n"
+    "  out_n = n;\n"
     "  gl_Position = MVP * vec4(p.x, p.y, p.z, 1.f);\n"
     "}\n"
   };
@@ -178,9 +181,10 @@ namespace pf
     "#version 130\n"
     "uniform sampler2D Diffuse;\n"
     "in vec2 out_t;\n"
+    "in vec3 out_n;\n"
     "out vec4 c;\n"
     "void main() {\n"
-    "  c = texture(Diffuse, out_t);\n"
+    "  c = texture(Diffuse, out_t) * abs(dot(out_n, normalize(vec3(0.2f,0.5f,0.2f))));\n"
     "}\n"
   };
 
@@ -188,6 +192,7 @@ namespace pf
     this->diffuse.program = buildProgram(diffuseVert, NULL, diffuseFrag);
     R_CALL (BindAttribLocation, this->diffuse.program, ATTR_POSITION, "p");
     R_CALL (BindAttribLocation, this->diffuse.program, ATTR_TEXCOORD, "t");
+    R_CALL (BindAttribLocation, this->diffuse.program, ATTR_NORMAL, "n");
     R_CALL (BindFragDataLocation, this->diffuse.program, 0, "c");
     R_CALL (LinkProgram, this->diffuse.program);
     R_CALL (validateProgram, this->diffuse.program);

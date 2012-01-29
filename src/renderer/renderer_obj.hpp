@@ -75,7 +75,6 @@ namespace pf
     GLuint arrayBuffer;           //!< Vertex data (positions, normals...)
     GLuint elementBuffer;         //!< Indices
     GLuint topology;              //!< Mostly triangle or triangle strip
-    uint32 properties;            //!< occluder == has a BVH
     MutexSys mutex;               //!< XXX just to play with async load
   private:
     virtual void onCompile(void);

@@ -45,7 +45,7 @@ namespace pf
   }
 
   INLINE void transpose4x3(const ssef &r0, const ssef &r1, const ssef &r2, const ssef &r3,
-                           ssef& c0,             ssef& c1,       ssef& c2)
+                           ssef& c0, ssef& c1, ssef& c2)
   {
     const ssef l02 = unpacklo(r0,r2);
     const ssef h02 = unpackhi(r0,r2);
@@ -218,8 +218,7 @@ namespace pf
   }
 
   /*! AABB (non leaf node) / packet intersection */
-  INLINE bool AABBIntersect
-    (const BVH2Node &node, const RayPacket &pckt, const PacketHit &hit, uint32 &first)
+  INLINE bool AABBIntersect(const BVH2Node &node, const RayPacket &pckt, const PacketHit &hit, uint32 &first)
   {
     // Avoid issues with w unused channel
     const ssef lower = ssef::load(&node.pmin.x).xyzz();
@@ -314,8 +313,7 @@ namespace pf
 
   /*! Generic Packet / Leaf intersection */
   template <typename T>
-  INLINE void LeafIntersect
-    (const BVH2<T> &bvh, const BVH2Node &node, const RayPacket &pckt, uint32 first, PacketHit &hit)
+  INLINE void LeafIntersect(const BVH2<T> &bvh, const BVH2Node &node, const RayPacket &pckt, uint32 first, PacketHit &hit)
   {
     uint32 active[RayPacket::chunkNum];
     uint32 activeNum;

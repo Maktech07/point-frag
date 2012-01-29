@@ -28,7 +28,7 @@
 namespace pf
 {
   ///////////////////////////////////////////////////////////////////////////
-  // Renderer context
+  /// Renderer context
   ///////////////////////////////////////////////////////////////////////////
 
   // Only one renderer is supported. Creating many contexts will simply add
@@ -81,24 +81,10 @@ namespace pf
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  // Renderer wavefront mesh
+  /// Renderer wavefront mesh
   ///////////////////////////////////////////////////////////////////////////
 
-  RnObj rnObjNew(RnContext ctx, const char *fileName) {
-    PF_ASSERT(ctx && fileName);
-    const FileName objName(fileName);
-    size_t path = 0;
-    Obj obj;
-    for (path = 0; path < defaultPathNum; ++path) {
-      if (obj.load(FileName(defaultPath[path]) + objName)) {
-        PF_MSG_V("Obj: " << objName << " loaded from " << defaultPath[path]);
-        break;
-      }
-    }
-    if (path == defaultPathNum) {
-      PF_WARNING_V("Obj: " << objName << " not found");
-      return NULL;
-    }
+  RnObj rnObjNew(RnContext ctx, const Obj &obj) {
     RnObj renderObj = PF_NEW(RendererObj, *ctx, obj);
     renderObj->refInc();
     renderObj->externalRefInc();
@@ -107,13 +93,13 @@ namespace pf
   void rnObjRetain(RnObj obj)  { RendererObjectRetain(obj); }
   void rnObjDelete(RnObj obj)  { RendererObjectDelete(obj); }
   void rnObjCompile(RnObj obj) { RendererObjectCompile(obj); }
-  void rnObjProperties(RnObj obj, uint32 properties) {
+  void rnObjSetIntersector(RnObj obj, RnIntersector intersector) {
     PF_ASSERT(obj && obj->isCompiled() == false);
-    obj->properties = properties;
+    obj->intersector = intersector;
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  // Renderer display list
+  /// Renderer display list
   ///////////////////////////////////////////////////////////////////////////
 
   RnDisplayList rnDisplayListNew(RnContext ctx) {
@@ -133,7 +119,7 @@ namespace pf
   }
 
   ///////////////////////////////////////////////////////////////////////////
-  // Renderer frame
+  /// Renderer frame
   ///////////////////////////////////////////////////////////////////////////
 
   RnFrame rnFrameNew(RnContext ctx) {

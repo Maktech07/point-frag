@@ -79,6 +79,7 @@ int main ()
   scaledGrains.SetScale (-0.5);
   scaledGrains.SetBias (0.0);
 
+#if 1
   // Combine the primary granite texture with the small grain texture.
   module::Add combinedGranite;
   combinedGranite.SetSourceModule (0, primaryGranite);
@@ -91,15 +92,17 @@ int main ()
   finalGranite.SetFrequency (4.0);
   finalGranite.SetPower (1.0 / 8.0);
   finalGranite.SetRoughness (6);
+#else
+  module::Add finalGranite;
+  finalGranite.SetSourceModule (0, primaryGranite);
+  finalGranite.SetSourceModule (1, scaledGrains);
+#endif
 
   // Given the granite noise module, create a non-seamless texture map, a
   // seamless texture map, and a spherical texture map.
-  CreatePlanarTexture (finalGranite, false, TEXTURE_HEIGHT,
-    "textureplane.bmp");
-  CreatePlanarTexture (finalGranite, true, TEXTURE_HEIGHT,
-    "textureseamless.bmp");
-  CreateSphericalTexture (finalGranite, TEXTURE_HEIGHT,
-    "texturesphere.bmp");
+  CreatePlanarTexture (finalGranite, false, TEXTURE_HEIGHT, "textureplane.bmp");
+  CreatePlanarTexture (finalGranite, true, TEXTURE_HEIGHT, "textureseamless.bmp");
+  CreateSphericalTexture (finalGranite, TEXTURE_HEIGHT, "texturesphere.bmp");
 
   return 0;
 }

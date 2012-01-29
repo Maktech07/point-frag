@@ -64,7 +64,7 @@ namespace pf
   static Task *HiZCull(HiZCullState *state)
   {
     // Compute the HiZ buffer
-    Ref<HiZ> hiz = PF_NEW(HiZ, 128, 64);
+    Ref<HiZ> hiz = PF_NEW(HiZ, 256, 128);
     Ref<Task> hizTask = hiz->rayTrace(state->cam, state->renderObj->intersector);
 
     // Then cull the segments
@@ -170,7 +170,7 @@ namespace pf
         R_CALL (UniformMatrix4fv, renderer.driver->diffuse.uMVP, 1, GL_FALSE, &MVP[0][0]);
         state->renderObj->display(state->visible, state->visibleNum);
         R_CALL (UseProgram, 0);
-
+#if 0
         // Display all the bounding boxes
         R_CALL (setMVP, MVP);
         BBox3f *bbox = PF_NEW_ARRAY(BBox3f, state->visibleNum);
@@ -180,6 +180,7 @@ namespace pf
         }
         R_CALL (displayBBox, bbox, state->visibleNum);
         PF_SAFE_DELETE_ARRAY(bbox);
+#endif
         PF_SAFE_DELETE(state);
         R_CALL(swapBuffers);
         if (this->refDec()) PF_DELETE(this);
